@@ -69,8 +69,7 @@ def test_transform(sql_server, sample_dag, test_table):
 
     with sample_dag:
         homes_file = aql.load_file(
-            path=str(cwd) + "/../../data/homes.csv",
-            output_table=test_table,
+            path=f"{str(cwd)}/../../data/homes.csv", output_table=test_table
         )
         first_model = sample_function(
             input_table=homes_file,
@@ -103,8 +102,7 @@ def test_raw_sql(sql_server, sample_dag, test_table):
 
     with sample_dag:
         homes_file = aql.load_file(
-            path=str(cwd) + "/../../data/homes.csv",
-            output_table=test_table,
+            path=f"{str(cwd)}/../../data/homes.csv", output_table=test_table
         )
         raw_sql_result = (
             raw_sql_query(

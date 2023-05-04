@@ -79,12 +79,13 @@ def get_paths(path, conn_id=None):
     location = get_location(path)
     if location == FileLocation.LOCAL:
         path = pathlib.Path(url.path)
-        if path.is_dir():
-            paths = [str(filepath) for filepath in path.rglob("*")]
-        else:
-            paths = glob.glob(url.path)
+        return (
+            [str(filepath) for filepath in path.rglob("*")]
+            if path.is_dir()
+            else glob.glob(url.path)
+        )
     elif location in (FileLocation.HTTP, FileLocation.HTTPS):
-        paths = [path]
+        return [path]
     else:
         bucket_name = url.netloc
         prefix = url.path[1:]
@@ -94,10 +95,10 @@ def get_paths(path, conn_id=None):
         else:  # location == FileLocation.S3:
             hook = s3.S3Hook(aws_conn_id=conn_id) if conn_id else s3.S3Hook()
             prefixes = hook.list_keys(bucket_name=bucket_name, prefix=prefix)
-        paths = [
-            urlunparse((url.scheme, url.netloc, keys, "", "", "")) for keys in prefixes
+        return [
+            urlunparse((url.scheme, url.netloc, keys, "", "", ""))
+            for keys in prefixes
         ]
-    return paths
 
 
 def is_local(path):

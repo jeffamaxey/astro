@@ -119,11 +119,11 @@ class TestSQLiteAppend(unittest.TestCase):
 
         with self.dag:
             load_main = aql.load_file(
-                path=str(cwd) + "/../data/homes_main.csv",
+                path=f"{str(cwd)}/../data/homes_main.csv",
                 output_table=self.main_table,
             )
             load_append = aql.load_file(
-                path=str(cwd) + "/../data/homes_append.csv",
+                path=f"{str(cwd)}/../data/homes_append.csv",
                 output_table=self.append_table,
             )
             aql.append(
@@ -152,11 +152,11 @@ class TestSQLiteAppend(unittest.TestCase):
 
         with self.dag:
             load_main = aql.load_file(
-                path=str(cwd) + "/../data/homes_main.csv",
+                path=f"{str(cwd)}/../data/homes_main.csv",
                 output_table=self.main_table,
             )
             load_append = aql.load_file(
-                path=str(cwd) + "/../data/homes_append.csv",
+                path=f"{str(cwd)}/../data/homes_append.csv",
                 output_table=self.append_table,
             )
             aql.append(
@@ -183,11 +183,11 @@ class TestSQLiteAppend(unittest.TestCase):
 
         with self.dag:
             load_main = aql.load_file(
-                path=str(cwd) + "/../data/homes_main.csv",
+                path=f"{str(cwd)}/../data/homes_main.csv",
                 output_table=self.main_table,
             )
             load_append = aql.load_file(
-                path=str(cwd) + "/../data/homes_append.csv",
+                path=f"{str(cwd)}/../data/homes_append.csv",
                 output_table=self.append_table,
             )
             aql.append(
@@ -216,11 +216,11 @@ class TestSQLiteAppend(unittest.TestCase):
 
         with self.dag:
             load_main = aql.load_file(
-                path=str(cwd) + "/../data/homes_main.csv",
+                path=f"{str(cwd)}/../data/homes_main.csv",
                 output_table=self.main_table,
             )
             load_append = aql.load_file(
-                path=str(cwd) + "/../data/homes_append.csv",
+                path=f"{str(cwd)}/../data/homes_append.csv",
                 output_table=self.append_table,
             )
             aql.append(

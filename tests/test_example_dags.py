@@ -37,7 +37,7 @@ def session():
 )
 def test_example_dag(session, dag_id):
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    db = DagBag(dir_path + "/../example_dags")
+    db = DagBag(f"{dir_path}/../example_dags")
     dag = db.get_dag(dag_id)
 
     if dag is None:

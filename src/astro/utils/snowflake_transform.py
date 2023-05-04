@@ -11,7 +11,7 @@ def _handle_table(t: Table):
     """
 
     snow_schema = t.schema or SCHEMA
-    return t.database + "." + snow_schema + "." + t.table_name
+    return f"{t.database}.{snow_schema}.{t.table_name}"
 
 
 def process_params(parameters):
@@ -22,8 +22,5 @@ def process_params(parameters):
 
 def add_templates_to_context(parameters, context):
     for k, v in parameters.items():
-        if type(v) == Table:
-            context[k] = "IDENTIFIER(:" + k + ")"
-        else:
-            context[k] = ":" + k
+        context[k] = f"IDENTIFIER(:{k})" if type(v) == Table else f":{k}"
     return context

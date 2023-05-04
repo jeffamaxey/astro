@@ -118,7 +118,7 @@ def describe_get_paths():
         assert sorted(get_paths(path)) == [LOCAL_DIR_FILE_1, LOCAL_DIR_FILE_2]
 
     def with_local_prefix(local_dir):
-        path = LOCAL_DIR + "file_*"
+        path = f"{LOCAL_DIR}file_*"
         assert sorted(get_paths(path)) == [LOCAL_DIR_FILE_1, LOCAL_DIR_FILE_2]
 
     @pytest.mark.integration

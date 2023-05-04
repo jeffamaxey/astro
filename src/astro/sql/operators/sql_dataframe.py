@@ -91,23 +91,22 @@ class SqlDataframeOperator(DecoratedOperator, TableHandler):
         self.handle_op_kwargs()
 
         pandas_dataframe = self.python_callable(*self.op_args, **self.op_kwargs)
-        if self.output_table:
-            self.populate_output_table()
-            if type(self.output_table) == TempTable:
-                self.output_table = self.output_table.to_table(
-                    table_name=create_table_name(context=context), schema=SCHEMA
-                )
-            self.output_table.schema = self.output_table.schema or SCHEMA
-            hook = get_hook(
-                conn_id=self.output_table.conn_id,
-                database=self.output_table.database,
-                schema=self.output_table.schema,
-                warehouse=self.output_table.warehouse,
-            )
-            load_dataframe_into_sql_table(pandas_dataframe, self.output_table, hook)
-            return self.output_table
-        else:
+        if not self.output_table:
             return pandas_dataframe
+        self.populate_output_table()
+        if type(self.output_table) == TempTable:
+            self.output_table = self.output_table.to_table(
+                table_name=create_table_name(context=context), schema=SCHEMA
+            )
+        self.output_table.schema = self.output_table.schema or SCHEMA
+        hook = get_hook(
+            conn_id=self.output_table.conn_id,
+            database=self.output_table.database,
+            schema=self.output_table.schema,
+            warehouse=self.output_table.warehouse,
+        )
+        load_dataframe_into_sql_table(pandas_dataframe, self.output_table, hook)
+        return self.output_table
 
     def get_snow_hook(self, table: Table) -> SnowflakeHook:
         """

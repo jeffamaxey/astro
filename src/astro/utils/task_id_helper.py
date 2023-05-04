@@ -8,5 +8,5 @@ def get_task_id(prefix, path):
     :param path: file path.
     :type path: str
     """
-    task_id = "{}_{}".format(prefix, path.rsplit("/", 1)[-1].replace(".", "_"))
+    task_id = f'{prefix}_{path.rsplit("/", 1)[-1].replace(".", "_")}'
     return get_unique_task_id(task_id)

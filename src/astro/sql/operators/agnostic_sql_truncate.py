@@ -19,7 +19,7 @@ class SqlTruncateOperator(SqlDecoratedOperator):
         self.sql = ""
         self.table = table
 
-        task_id = get_unique_task_id(table.table_name + "_truncate")
+        task_id = get_unique_task_id(f"{table.table_name}_truncate")
 
         def null_function(table: Table):
             pass

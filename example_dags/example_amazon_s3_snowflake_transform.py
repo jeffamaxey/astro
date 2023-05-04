@@ -27,11 +27,9 @@ def clean_data(input_table: Table):
 
 @df(identifiers_as_lower=False)
 def aggregate_data(df: pd.DataFrame):
-    adoption_reporting_dataframe = df.pivot_table(
+    return df.pivot_table(
         index="DATE", values="NAME", columns=["TYPE"], aggfunc="count"
     ).reset_index()
-
-    return adoption_reporting_dataframe
 
 
 @dag(
@@ -82,7 +80,7 @@ def example_amazon_s3_snowflake_transform():
     aggregate_data(
         cleaned_data,
         output_table=Table(
-            "aggregated_adoptions_" + str(int(time.time())),
+            f"aggregated_adoptions_{int(time.time())}",
             schema=os.environ["SNOWFLAKE_SCHEMA"],
             conn_id="snowflake_conn",
         ),

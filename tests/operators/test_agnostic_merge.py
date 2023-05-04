@@ -32,17 +32,11 @@ def merge_keys(sql_server, mode):
     """
     sql_name, _ = sql_server
     keys = []
-    if mode == "single":
+    if mode in ["multi", "update"]:
+        keys = ["list", "sell"]
+    elif mode == "single":
         keys = ["list"]
-    if mode == "multi":
-        keys = ["list", "sell"]
-    if mode == "update":
-        keys = ["list", "sell"]
-
-    if sql_name == "snowflake":
-        return {k: k for k in keys}
-    else:
-        return keys
+    return {k: k for k in keys} if sql_name == "snowflake" else keys
 
 
 @pytest.fixture
@@ -134,12 +128,10 @@ def validate_results(df: pd.DataFrame, mode, sql_type):
 @task_group
 def run_merge(output_specs: TempTable, merge_parameters, mode, sql_type):
     main_table = aql.load_file(
-        path=str(CWD) + "/../data/homes_merge_1.csv",
-        output_table=output_specs,
+        path=f"{str(CWD)}/../data/homes_merge_1.csv", output_table=output_specs
     )
     merge_table = aql.load_file(
-        path=str(CWD) + "/../data/homes_merge_2.csv",
-        output_table=output_specs,
+        path=f"{str(CWD)}/../data/homes_merge_2.csv", output_table=output_specs
     )
 
     con1 = add_constraint(main_table, merge_parameters["merge_keys"])

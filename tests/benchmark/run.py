@@ -58,7 +58,7 @@ def profile(func, *args, **kwargs):
         if sys.platform == "linux":
             profile["io_counters"] = (subtract(io_counters_after, io_counters_before),)
 
-        profile = {**profile, **kwargs}
+        profile = profile | kwargs
         print(json.dumps(profile, default=str))
         return result
 

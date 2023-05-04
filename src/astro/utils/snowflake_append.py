@@ -15,7 +15,7 @@ def snowflake_append_func(
     main_table, columns, casted_columns, append_table, snowflake_conn_id
 ):
     def wrap_identifier(inp):
-        return "Identifier(%(" + inp + ")s)"
+        return f"Identifier(%({inp})s)"
 
     if columns or casted_columns:
         statement = (
@@ -45,13 +45,13 @@ def snowflake_append_func(
     # TODO: Please note that we are not wrapping these in Identifier due to a snowflake bug.
     #  Must fix before public release!
     statement = statement.replace(
-        "{fields}", ",".join([wrap_identifier(c) for c in col_dict.keys()])
+        "{fields}", ",".join([wrap_identifier(c) for c in col_dict])
     )
     statement = statement.replace(
         "{casted_fields}",
         ",".join(
             [
-                "CAST(" + wrap_identifier(c) + " AS " + casted_columns[v] + ")"
+                f"CAST({wrap_identifier(c)} AS {casted_columns[v]})"
                 for c, v in casted_col_dict.items()
             ]
         ),

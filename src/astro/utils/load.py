@@ -115,11 +115,11 @@ def populate_normalize_config(
         "record_prefix": ndjson_normalize_sep,
         "sep": ndjson_normalize_sep,
     }
-    replacement = "_"
-    illegal_char = "."
-
     if database in [Database.BIGQUERY, Database.SNOWFLAKE]:
         meta_prefix = ndjson_normalize_sep
+        replacement = "_"
+        illegal_char = "."
+
         if meta_prefix and meta_prefix == illegal_char:
             normalize_config["meta_prefix"] = replacement
 
@@ -155,7 +155,7 @@ def load_file_rows_into_dataframe(
         filetype = get_filetype(filepath)
     if filetype in [FileType.JSON, FileType.NDJSON]:
         dataframe = load_file_into_dataframe(filepath, filetype)
-        dataframe = dataframe.iloc[0:rows_count]
+        dataframe = dataframe.iloc[:rows_count]
     elif filetype == FileType.PARQUET:
         parquet_file = ParquetFile(filepath)
         first_rows = next(parquet_file.iter_batches(batch_size=rows_count))

@@ -42,10 +42,7 @@ def tables_from_same_db(tables: List[Table]):
     :param tables: List of table
     :return: Boolean
     """
-    conn_ids = set()
-    for table in tables:
-        if table.conn_id:
-            conn_ids.add(table.conn_id)
+    conn_ids = {table.conn_id for table in tables if table.conn_id}
     return len(conn_ids) == 1
 
 

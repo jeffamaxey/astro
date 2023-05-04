@@ -83,10 +83,7 @@ class SqlDecoratedOperator(DecoratedOperator, TableHandler):
     def execute(self, context: Dict):
         if not isinstance(self.sql, str):
             cursor = self._run_sql(self.sql, self.parameters)
-            if self.handler is not None:
-                return self.handler(cursor)
-            return cursor
-
+            return self.handler(cursor) if self.handler is not None else cursor
         self._set_variables_from_first_table()
         self.database = self.database or self.database_from_conn_id
 
@@ -99,8 +96,7 @@ class SqlDecoratedOperator(DecoratedOperator, TableHandler):
         self.convert_op_kwarg_dataframes()
         self.read_sql()
         self.handle_params(context)
-        context = self._add_templates_to_context(context)
-        if context:
+        if context := self._add_templates_to_context(context):
             self.sql = self.render_template(self.sql, context)
         self._process_params()
 
@@ -132,10 +128,8 @@ class SqlDecoratedOperator(DecoratedOperator, TableHandler):
                 f"DROP TABLE IF EXISTS {full_output_table_name};", self.parameters
             )
             self.sql = self.create_temporary_table(self.sql, full_output_table_name)
-        else:
-            # If there's no SQL to run we simply return
-            if self.sql == "" or not self.sql:
-                return
+        elif self.sql == "" or not self.sql:
+            return
 
         query_result = self._run_sql(self.sql, self.parameters)
         # Run execute function of subclassed Operator.
@@ -150,9 +144,7 @@ class SqlDecoratedOperator(DecoratedOperator, TableHandler):
             return self.output_table
 
         elif self.raw_sql:
-            if self.handler is not None:
-                return self.handler(query_result)
-            return None
+            return self.handler(query_result) if self.handler is not None else None
         else:
             self.output_table = Table(
                 table_name=output_table_name,
@@ -283,10 +275,7 @@ class SqlDecoratedOperator(DecoratedOperator, TableHandler):
 
     def default_transform(self, parameters, context):
         for k, v in parameters.items():
-            if isinstance(v, Table):
-                context[k] = v.table_name
-            else:
-                context[k] = ":" + k
+            context[k] = v.table_name if isinstance(v, Table) else ":" + k
         return context
 
     def _cleanup(self):
@@ -296,7 +285,7 @@ class SqlDecoratedOperator(DecoratedOperator, TableHandler):
 
     def convert_op_arg_dataframes(self):
         final_args = []
-        for i, arg in enumerate(self.op_args):
+        for arg in self.op_args:
             if type(arg) == pd.DataFrame:
                 pandas_dataframe = arg
                 output_table_name = create_unique_table_name()

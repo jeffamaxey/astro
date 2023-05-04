@@ -54,9 +54,7 @@ class Table:
         if self.conn_type == "sqlite":
             return self.table_name
         else:
-            return (
-                self.schema + "." + self.table_name if self.schema else self.table_name
-            )
+            return f"{self.schema}.{self.table_name}" if self.schema else self.table_name
 
     def __str__(self):
         return (
@@ -123,7 +121,7 @@ def create_unique_table_name(length: int = UNIQUE_TABLE_NAME_LENGTH) -> str:
     :return: Unique table name
     :rtype: str
     """
-    unique_id = random.choice(string.ascii_lowercase) + "".join(
-        random.choice(string.ascii_lowercase + string.digits) for _ in range(length - 1)
+    return random.choice(string.ascii_lowercase) + "".join(
+        random.choice(string.ascii_lowercase + string.digits)
+        for _ in range(length - 1)
     )
-    return unique_id

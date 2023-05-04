@@ -45,9 +45,7 @@ def create_database_connections():
     with open(os.path.dirname(__file__) + "/test-connections.yaml") as file:
         yaml_with_env = os.path.expandvars(file.read())
         yaml_dicts = yaml.safe_load(yaml_with_env)
-        connections = []
-        for i in yaml_dicts["connections"]:
-            connections.append(Connection(**i))
+        connections = [Connection(**i) for i in yaml_dicts["connections"]]
     with create_session() as session:
         session.query(DagRun).delete()
         session.query(TI).delete()
@@ -229,11 +227,10 @@ def remote_file(request):
         if provider == "google":
             if hook.exists(bucket_name, object_prefix):
                 hook.delete(bucket_name, object_prefix)
-        else:
-            if hook.check_for_prefix(
+        elif hook.check_for_prefix(
                 object_prefix, delimiter="/", bucket_name=bucket_name
             ):
-                hook.delete_objects(bucket_name, object_prefix)
+            hook.delete_objects(bucket_name, object_prefix)
 
     session.delete(new_connection)
     session.flush()

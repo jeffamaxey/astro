@@ -98,7 +98,7 @@ class SqlAppendOperator(SqlDecoratedOperator, TableHandler):
         casted_fields = [
             cast(column(k), getattr(sqlalchemy, v)) for k, v in casted_columns.items()
         ]
-        main_columns = [k for k, v in casted_columns.items()]
+        main_columns = list(casted_columns)
         main_columns.extend(list(columns))
 
         if len(column_names) + len(casted_fields) == 0:

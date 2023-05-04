@@ -16,38 +16,35 @@ SUMMARY_FIELDS = [
 ]
 
 if sys.platform == "linux":
-    SUMMARY_FIELDS.append("memory_pss")
-    SUMMARY_FIELDS.append("memory_shared")
+    SUMMARY_FIELDS.extend(("memory_pss", "memory_shared"))
 
 
 def format_bytes(bytes_):
     if abs(bytes_) < 1000:
-        return str(bytes_) + "B"
+        return f"{str(bytes_)}B"
     elif abs(bytes_) < 1e6:
-        return str(round(bytes_ / 1e3, 2)) + "kB"
+        return f"{str(round(bytes_ / 1000.0, 2))}kB"
     elif abs(bytes_) < 1e9:
-        return str(round(bytes_ / 1e6, 2)) + "MB"
+        return f"{str(round(bytes_ / 1000000.0, 2))}MB"
     else:
-        return str(round(bytes_ / 1e9, 2)) + "GB"
+        return f"{str(round(bytes_ / 1000000000.0, 2))}GB"
 
 
 def format_time(time):
     if time < 1:
-        return str(round(time * 1000, 2)) + "ms"
+        return f"{str(round(time * 1000, 2))}ms"
     if time < 60:
-        return str(round(time, 2)) + "s"
+        return f"{str(round(time, 2))}s"
     if time < 3600:
-        return str(round(time / 60, 2)) + "min"
+        return f"{str(round(time / 60, 2))}min"
     else:
-        return str(round(time / 3600, 2)) + "hrs"
+        return f"{str(round(time / 3600, 2))}hrs"
 
 
 def analyse_results(results_filepath):
     data = []
     with open(results_filepath) as fp:
-        for line in fp.readlines():
-            data.append(json.loads(line.strip()))
-
+        data.extend(json.loads(line.strip()) for line in fp)
     df = pd.json_normalize(data, sep="_")
 
     # calculate total CPU from process & children

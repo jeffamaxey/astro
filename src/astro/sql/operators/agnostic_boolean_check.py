@@ -26,10 +26,9 @@ class Check:
         return text(f"CASE WHEN {self.expression} THEN 0 ELSE 1 END AS {self.name}")
 
     def get_result(self):
-        value = cast(func.sum(column(self.name)), FLOAT) / func.count().label(
-            self.name + "_result"
+        return cast(func.sum(column(self.name)), FLOAT) / func.count().label(
+            f"{self.name}_result"
         )
-        return value
 
 
 class AgnosticBooleanCheck(SqlDecoratedOperator):

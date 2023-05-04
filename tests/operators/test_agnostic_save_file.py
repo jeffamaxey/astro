@@ -73,7 +73,7 @@ def test_save_dataframe_to_local(sample_dag):
     ids=["temp_table"],
 )
 def test_save_temp_table_to_local(sample_dag, sql_server, test_table):
-    data_path = str(CWD) + "/../data/homes.csv"
+    data_path = f"{str(CWD)}/../data/homes.csv"
     with sample_dag:
         table = aql.load_file(path=data_path, file_conn_id="", output_table=test_table)
         aql.save_file(
@@ -87,22 +87,10 @@ def test_save_temp_table_to_local(sample_dag, sql_server, test_table):
 
 
 @pytest.mark.parametrize("sql_server", SUPPORTED_DATABASES, indirect=True)
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        {
-            "path": str(CWD) + "/../data/homes.csv",
-            "load_table": True,
-            "is_temp": False,
-            "param": {
+@pytest.mark.parametrize("test_table", [{"path": f"{str(CWD)}/../data/homes.csv", "load_table": True, "is_temp": False, "param": {
                 "schema": SCHEMA,
                 "table_name": test_utils.get_table_name("test_stats_check_1"),
-            },
-        }
-    ],
-    indirect=True,
-    ids=["temp_table"],
-)
+            }}], indirect=True, ids=["temp_table"])
 def test_save_all_db_tables_to_S3(sample_dag, test_table, sql_server):
 
     _creds = s3fs_creds()
@@ -137,22 +125,10 @@ def test_save_all_db_tables_to_S3(sample_dag, test_table, sql_server):
 
 
 @pytest.mark.parametrize("sql_server", SUPPORTED_DATABASES, indirect=True)
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        {
-            "path": str(CWD) + "/../data/homes2.csv",
-            "load_table": True,
-            "is_temp": False,
-            "param": {
+@pytest.mark.parametrize("test_table", [{"path": f"{str(CWD)}/../data/homes2.csv", "load_table": True, "is_temp": False, "param": {
                 "schema": SCHEMA,
                 "table_name": test_utils.get_table_name("test_stats_check_1"),
-            },
-        }
-    ],
-    indirect=True,
-    ids=["temp_table"],
-)
+            }}], indirect=True, ids=["temp_table"])
 def test_save_all_db_tables_to_GCS(sample_dag, test_table, sql_server):
 
     sql_name, hook = sql_server
@@ -182,22 +158,10 @@ def test_save_all_db_tables_to_GCS(sample_dag, test_table, sql_server):
 
 
 @pytest.mark.parametrize("sql_server", SUPPORTED_DATABASES, indirect=True)
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        {
-            "path": str(CWD) + "/../data/homes.csv",
-            "load_table": True,
-            "is_temp": False,
-            "param": {
+@pytest.mark.parametrize("test_table", [{"path": f"{str(CWD)}/../data/homes.csv", "load_table": True, "is_temp": False, "param": {
                 "schema": SCHEMA,
                 "table_name": test_utils.get_table_name("test_stats_check_1"),
-            },
-        }
-    ],
-    indirect=True,
-    ids=["temp_table"],
-)
+            }}], indirect=True, ids=["temp_table"])
 def test_save_all_db_tables_to_local_file_exists_overwrite_false(
     sample_dag, test_table, sql_server, caplog
 ):
@@ -216,22 +180,10 @@ def test_save_all_db_tables_to_local_file_exists_overwrite_false(
 
 
 @pytest.mark.parametrize("sql_server", SUPPORTED_DATABASES, indirect=True)
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        {
-            "path": str(CWD) + "/../data/homes.csv",
-            "load_table": True,
-            "is_temp": False,
-            "param": {
+@pytest.mark.parametrize("test_table", [{"path": f"{str(CWD)}/../data/homes.csv", "load_table": True, "is_temp": False, "param": {
                 "schema": SCHEMA,
                 "table_name": test_utils.get_table_name("test_stats_check_1"),
-            },
-        }
-    ],
-    indirect=True,
-    ids=["temp_table"],
-)
+            }}], indirect=True, ids=["temp_table"])
 @pytest.mark.parametrize(
     "remote_file",
     [{"name": "google"}, {"name": "amazon"}],
@@ -258,25 +210,13 @@ def test_save_table_remote_file_exists_overwrite_false(
 
 
 @pytest.mark.parametrize("sql_server", [Database.SQLITE.value], indirect=True)
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        {
-            "is_temp": False,
-            "path": str(CWD) + "/../data/homes2.csv",
-            "load_table": True,
-            "param": {
+@pytest.mark.parametrize("test_table", [{"is_temp": False, "path": f"{str(CWD)}/../data/homes2.csv", "load_table": True, "param": {
                 "schema": SCHEMA,
                 "table_name": test_utils.get_table_name("test_save"),
-            },
-        }
-    ],
-    indirect=True,
-    ids=["temp_table"],
-)
+            }}], indirect=True, ids=["temp_table"])
 def test_unique_task_id_for_same_path(sample_dag, sql_server, test_table):
     file_name = f"{test_utils.get_table_name('output')}.csv"
-    OUTPUT_FILE_PATH = str(CWD) + f"/../data/{file_name}"
+    OUTPUT_FILE_PATH = f"{str(CWD)}/../data/{file_name}"
 
     tasks = []
     with sample_dag:
@@ -318,22 +258,10 @@ def load_to_dataframe(filepath, file_type):
 
 @pytest.mark.parametrize("sql_server", SUPPORTED_DATABASES, indirect=True)
 @pytest.mark.parametrize("file_type", SUPPORTED_FILE_TYPES)
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        {
-            "path": str(CWD) + "/../data/sample.csv",
-            "load_table": True,
-            "is_temp": False,
-            "param": {
+@pytest.mark.parametrize("test_table", [{"path": f"{str(CWD)}/../data/sample.csv", "load_table": True, "is_temp": False, "param": {
                 "schema": SCHEMA,
                 "table_name": test_utils.get_table_name("test_stats_check_1"),
-            },
-        }
-    ],
-    indirect=True,
-    ids=["test-table"],
-)
+            }}], indirect=True, ids=["test-table"])
 def test_save_file(sample_dag, sql_server, file_type, test_table):
 
     with tempfile.TemporaryDirectory() as tmp_dir:

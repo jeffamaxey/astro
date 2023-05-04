@@ -40,11 +40,10 @@ def extract_data(homes1: Table, homes2: Table):
 @dataframe
 def transform_data(df: pd.DataFrame):
     df.columns = df.columns.str.lower()
-    melted_df = df.melt(
-        id_vars=["sell", "list"], value_vars=["living", "rooms", "beds", "baths", "age"]
+    return df.melt(
+        id_vars=["sell", "list"],
+        value_vars=["living", "rooms", "beds", "baths", "age"],
     )
-
-    return melted_df
 
 
 # Back to SQL to filter data

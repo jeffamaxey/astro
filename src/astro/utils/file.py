@@ -47,9 +47,7 @@ def is_binary(filetype: FileType) -> bool:
     :return: True or False
     :rtype: bool
     """
-    if filetype == FileType.PARQUET:
-        return True
-    return False
+    return filetype == FileType.PARQUET
 
 
 def is_small(filepath: str) -> bool:
@@ -63,4 +61,4 @@ def is_small(filepath: str) -> bool:
     :rtype: boolean
     """
     size_in_bytes = get_size(filepath)
-    return bool(size_in_bytes <= LOAD_DATAFRAME_BYTES_LIMIT)
+    return size_in_bytes <= LOAD_DATAFRAME_BYTES_LIMIT

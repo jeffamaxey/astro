@@ -10,11 +10,9 @@ class MissingPackage(type):
     package_name: str = ""
     related_extras: str = ""
 
-    def __getattr__(cls, key: str) -> None:
+    def __getattr__(self, key: str) -> None:
         raise RuntimeError(
-            f"Error loading the package {cls.package_name},"
-            f" please make sure all the dependencies are installed."
-            f" try - pip install {constants.PYPI_PROJECT_NAME}[{cls.related_extras}]"
+            f"Error loading the package {self.package_name}, please make sure all the dependencies are installed. try - pip install {constants.PYPI_PROJECT_NAME}[{self.related_extras}]"
         )
 
 

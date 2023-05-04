@@ -71,11 +71,10 @@ def test_append(sql_server, sample_dag, test_table, append_params):
 
     with sample_dag:
         load_main = aql.load_file(
-            path=str(CWD) + "/../data/homes_main.csv",
-            output_table=test_table,
+            path=f"{str(CWD)}/../data/homes_main.csv", output_table=test_table
         )
         load_append = aql.load_file(
-            path=str(CWD) + "/../data/homes_append.csv",
+            path=f"{str(CWD)}/../data/homes_append.csv",
             output_table=test_table,
         )
         appended_table = aql.append(
@@ -100,11 +99,11 @@ def test_append_on_tables_on_different_db(sample_dag, sql_server):
     with pytest.raises(BackfillUnfinished):
         with sample_dag:
             load_main = aql.load_file(
-                path=str(CWD) + "/../data/homes_main.csv",
+                path=f"{str(CWD)}/../data/homes_main.csv",
                 output_table=test_table_1,
             )
             load_append = aql.load_file(
-                path=str(CWD) + "/../data/homes_append.csv",
+                path=f"{str(CWD)}/../data/homes_append.csv",
                 output_table=test_table_2,
             )
             aql.append(

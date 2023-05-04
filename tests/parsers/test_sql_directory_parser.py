@@ -118,7 +118,7 @@ class TestSQLParsing(unittest.TestCase):
             cwd = pathlib.Path(__file__).parent
 
             input_table = aql.load_file(
-                path=str(cwd) + "/../data/homes.csv",
+                path=f"{str(cwd)}/../data/homes.csv",
                 output_table=Table(
                     test_utils.get_table_name("snowflake_render_test"),
                     conn_id="snowflake_conn",

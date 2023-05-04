@@ -38,7 +38,7 @@ def table(request):
         warehouse=os.getenv("SNOWFLAKE_WAREHOUSE"),  # type: ignore
         conn_id="snowflake_conn",
     )
-    path = str(CWD) + "/../data/homes_merge_1.csv"
+    path = f"{str(CWD)}/../data/homes_merge_1.csv"
     tables = {
         "postgres": aggregate_table,
         "bigquery": aggregate_table_bigquery,

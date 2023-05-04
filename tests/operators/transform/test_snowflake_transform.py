@@ -38,13 +38,12 @@ def drop_table(table_name, snowflake_conn):
 
 
 def get_snowflake_hook():
-    hook = SnowflakeHook(
+    return SnowflakeHook(
         snowflake_conn_id="snowflake_conn",
         schema=os.environ["SNOWFLAKE_SCHEMA"],
         database=os.environ["SNOWFLAKE_DATABASE"],
         warehouse=os.environ["SNOWFLAKE_WAREHOUSE"],
     )
-    return hook
 
 
 def snowflake_table(table_name, role):
@@ -75,8 +74,7 @@ def run_role_query(dag, table, role):
 
     with dag:
         loaded_table = aql.load_file(
-            path=str(CWD) + "/../../data/homes.csv",
-            output_table=table,
+            path=f"{str(CWD)}/../../data/homes.csv", output_table=table
         )
 
         f = sample_snow(

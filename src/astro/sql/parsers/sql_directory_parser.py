@@ -35,9 +35,7 @@ def get_paths_for_render(path):
             except FileNotFoundError:
                 logging.info("Could not find template_path %s", full_path)
     logging.info("No template path found, rendering base path %s", path)
-    if ret_paths:
-        return ret_paths
-    return [path]
+    return ret_paths if ret_paths else [path]
 
 
 def get_all_file_names(paths: List[str]):
@@ -160,11 +158,9 @@ def render(
     paths = get_paths_for_render(path)
 
     template_dict = kwargs
-    default_params = {}
-    default_params.update(template_dict)
-
+    default_params = dict(template_dict)
     all_file_names = get_all_file_names(paths)
-    default_params.update({filename.split(".")[0]: None for filename in all_file_names})
+    default_params |= {filename.split(".")[0]: None for filename in all_file_names}
 
     for path in paths:
         template_dict = render_single_path(
@@ -192,9 +188,7 @@ def render(
             # due to an edge case in XComArg, we need to explicitly set dependencies here
             if type(template_dict[param]) == XComArg:
                 template_dict[param].operator >> current_operator
-    ret = []
-    for f in template_dict.values():
-        ret.append(f)
+    ret = list(template_dict.values())
     return template_dict
 
 

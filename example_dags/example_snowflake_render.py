@@ -9,7 +9,7 @@ from astro.sql.table import Table
 SNOWFLAKE_CONN_ID = "snowflake_conn"
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-FILE_PATH = dir_path + "/data/"
+FILE_PATH = f"{dir_path}/data/"
 
 """
 This DAG highlights using the render function to execute SQL queries.
@@ -37,7 +37,7 @@ dag = DAG(
 
 with dag:
     homes_data1 = load_file(
-        path=FILE_PATH + "homes.csv",
+        path=f"{FILE_PATH}homes.csv",
         output_table=Table(
             conn_id=SNOWFLAKE_CONN_ID,
             database=os.getenv("SNOWFLAKE_DATABASE"),
@@ -47,7 +47,7 @@ with dag:
     )
 
     homes_data2 = load_file(
-        path=FILE_PATH + "homes2.csv",
+        path=f"{FILE_PATH}homes2.csv",
         output_table=Table(
             conn_id=SNOWFLAKE_CONN_ID,
             database=os.getenv("SNOWFLAKE_DATABASE"),

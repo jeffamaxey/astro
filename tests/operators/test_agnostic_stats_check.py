@@ -33,32 +33,13 @@ TABLES_CACHE: Dict[str, Dict] = {}
     ],
     indirect=True,
 )
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        [
-            {
-                "path": str(CWD) + "/../data/homes.csv",
-                "load_table": True,
-                "is_temp": False,
-                "param": {
+@pytest.mark.parametrize("test_table", [[{"path": f"{str(CWD)}/../data/homes.csv", "load_table": True, "is_temp": False, "param": {
                     "schema": SCHEMA,
                     "table_name": test_utils.get_table_name("test_stats_check_1"),
-                },
-            },
-            {
-                "path": str(CWD) + "/../data/homes3.csv",
-                "load_table": True,
-                "is_temp": False,
-                "param": {
+                }}, {"path": f"{str(CWD)}/../data/homes3.csv", "load_table": True, "is_temp": False, "param": {
                     "schema": SCHEMA,
                     "table_name": test_utils.get_table_name("test_stats_check_2"),
-                },
-            },
-        ],
-    ],
-    indirect=True,
-)
+                }}]], indirect=True)
 def test_stats_check_outlier_dont_exists(sample_dag, sql_server, test_table):
     with sample_dag:
         aql.stats_check(
@@ -79,32 +60,13 @@ def test_stats_check_outlier_dont_exists(sample_dag, sql_server, test_table):
     ],
     indirect=True,
 )
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        [
-            {
-                "path": str(CWD) + "/../data/homes.csv",
-                "load_table": True,
-                "is_temp": False,
-                "param": {
+@pytest.mark.parametrize("test_table", [[{"path": f"{str(CWD)}/../data/homes.csv", "load_table": True, "is_temp": False, "param": {
                     "schema": SCHEMA,
                     "table_name": test_utils.get_table_name("test_stats_check_1"),
-                },
-            },
-            {
-                "path": str(CWD) + "/../data/homes2.csv",
-                "load_table": True,
-                "is_temp": False,
-                "param": {
+                }}, {"path": f"{str(CWD)}/../data/homes2.csv", "load_table": True, "is_temp": False, "param": {
                     "schema": SCHEMA,
                     "table_name": test_utils.get_table_name("test_stats_check_2"),
-                },
-            },
-        ],
-    ],
-    indirect=True,
-)
+                }}]], indirect=True)
 def test_stats_check_outlier_exists(sample_dag, sql_server, test_table, caplog):
     with pytest.raises(BackfillUnfinished):
         with sample_dag:

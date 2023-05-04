@@ -71,28 +71,23 @@ class ChecksHandler:
         return or_(*column_sql)
 
     def prepare_cases_sql(self, main_stats, compare_table_sqla):
-        cases = []
-        for check in self.checks:
-            cases.append(
-                case(
-                    [
-                        (
-                            self.prepare_column_sql(
-                                check, main_stats, compare_table_sqla
-                            ),
-                            1,
+        return [
+            case(
+                [
+                    (
+                        self.prepare_column_sql(
+                            check, main_stats, compare_table_sqla
                         ),
-                    ],
-                    else_=0,
-                ).label(check.name)
-            )
-        return cases
+                        1,
+                    ),
+                ],
+                else_=0,
+            ).label(check.name)
+            for check in self.checks
+        ]
 
     def prepare_checks_sql(self, temp_table):
-        aggregations = []
-        for check in self.checks:
-            aggregations.append(func.sum(temp_table.c.get(check.name)))
-        return aggregations
+        return [func.sum(temp_table.c.get(check.name)) for check in self.checks]
 
     def prepare_comparison_sql(
         self, main_table: Table, compare_table: Table, engine, metadata_obj
@@ -111,9 +106,7 @@ class ChecksHandler:
         checks_sql = self.prepare_checks_sql(temp_table)
 
         checks_sql.insert(0, func.count().label("total"))
-        comparison_sql = select(checks_sql).select_from(temp_table)
-
-        return comparison_sql
+        return select(checks_sql).select_from(temp_table)
 
     def check_results(self, row, check, index):
         return row[index + 1]
@@ -124,11 +117,11 @@ class ChecksHandler:
             check.name: self.check_results(rows[0], check, index)
             for index, check in enumerate(self.checks)
         }
-        failed_checks = set()
-        for check in self.checks:
-            if failed_rows_count[check.name] / total_rows > check.threshold:
-                failed_checks.add(check.name)
-        return failed_checks
+        return {
+            check.name
+            for check in self.checks
+            if failed_rows_count[check.name] / total_rows > check.threshold
+        }
 
     def prepare_failed_checks_results(
         self,
@@ -194,7 +187,7 @@ class AgnosticStatsCheck(SqlDecoratedOperator):
         self.checks = checks
         self.database = main_table.database
 
-        task_id = main_table.table_name + "_" + "stats_check"
+        task_id = f"{main_table.table_name}_stats_check"
 
         if not tables_from_same_db([main_table, compare_table]):
             raise ValueError(

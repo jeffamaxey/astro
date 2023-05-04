@@ -69,7 +69,7 @@ def table(request):
         warehouse=os.getenv("SNOWFLAKE_WAREHOUSE"),  # type: ignore
         conn_id="snowflake_conn",
     )
-    path = str(CWD) + "/../data/homes_append.csv"
+    path = f"{str(CWD)}/../data/homes_append.csv"
     tables = {
         "postgres": boolean_check_table,
         "bigquery": boolean_check_table_bigquery,

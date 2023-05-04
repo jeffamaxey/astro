@@ -21,21 +21,10 @@ CWD = pathlib.Path(__file__).parent
 
 
 @pytest.mark.parametrize("sql_server", SUPPORTED_DATABASES, indirect=True)
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        {
-            "path": str(CWD) + "/../data/homes2.csv",
-            "load_table": True,
-            "is_temp": False,
-            "param": {
+@pytest.mark.parametrize("test_table", [{"path": f"{str(CWD)}/../data/homes2.csv", "load_table": True, "is_temp": False, "param": {
                 "schema": SCHEMA,
                 "table_name": test_utils.get_table_name("test_stats_check_2"),
-            },
-        }
-    ],
-    indirect=True,
-)
+            }}], indirect=True)
 def test_dataframe_from_sql_basic(sample_dag, sql_server, test_table):
     """Test basic operation of dataframe operator."""
 
@@ -55,21 +44,10 @@ def test_dataframe_from_sql_basic(sample_dag, sql_server, test_table):
 
 
 @pytest.mark.parametrize("sql_server", SUPPORTED_DATABASES, indirect=True)
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        {
-            "path": str(CWD) + "/../data/homes2.csv",
-            "load_table": True,
-            "is_temp": False,
-            "param": {
+@pytest.mark.parametrize("test_table", [{"path": f"{str(CWD)}/../data/homes2.csv", "load_table": True, "is_temp": False, "param": {
                 "schema": SCHEMA,
                 "table_name": test_utils.get_table_name("test_stats_check_2"),
-            },
-        }
-    ],
-    indirect=True,
-)
+            }}], indirect=True)
 def test_dataframe_from_sql_custom_task_id(sample_dag, sql_server, test_table):
     """Test custom and taskId increment when same task is added multiple times."""
 
@@ -87,21 +65,10 @@ def test_dataframe_from_sql_custom_task_id(sample_dag, sql_server, test_table):
 
 
 @pytest.mark.parametrize("sql_server", SUPPORTED_DATABASES, indirect=True)
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        {
-            "path": str(CWD) + "/../data/homes2.csv",
-            "load_table": True,
-            "is_temp": False,
-            "param": {
+@pytest.mark.parametrize("test_table", [{"path": f"{str(CWD)}/../data/homes2.csv", "load_table": True, "is_temp": False, "param": {
                 "schema": SCHEMA,
                 "table_name": test_utils.get_table_name("test_stats_check_2"),
-            },
-        }
-    ],
-    indirect=True,
-)
+            }}], indirect=True)
 def test_dataframe_from_sql_basic_op_arg(sample_dag, sql_server, test_table):
     """Test basic operation of dataframe operator with op_args."""
 
@@ -122,21 +89,10 @@ def test_dataframe_from_sql_basic_op_arg(sample_dag, sql_server, test_table):
 
 
 @pytest.mark.parametrize("sql_server", SUPPORTED_DATABASES, indirect=True)
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        {
-            "path": str(CWD) + "/../data/homes2.csv",
-            "load_table": True,
-            "is_temp": False,
-            "param": {
+@pytest.mark.parametrize("test_table", [{"path": f"{str(CWD)}/../data/homes2.csv", "load_table": True, "is_temp": False, "param": {
                 "schema": SCHEMA,
                 "table_name": test_utils.get_table_name("test_stats_check_2"),
-            },
-        }
-    ],
-    indirect=True,
-)
+            }}], indirect=True)
 def test_dataframe_from_sql_basic_op_arg_and_kwarg(sample_dag, sql_server, test_table):
     """Test dataframe creation from table object in args and kwargs."""
 
@@ -157,21 +113,10 @@ def test_dataframe_from_sql_basic_op_arg_and_kwarg(sample_dag, sql_server, test_
 
 
 @pytest.mark.parametrize("sql_server", [Database.SNOWFLAKE.value], indirect=True)
-@pytest.mark.parametrize(
-    "test_table",
-    [
-        {
-            "path": str(CWD) + "/../data/homes2.csv",
-            "load_table": True,
-            "is_temp": False,
-            "param": {
+@pytest.mark.parametrize("test_table", [{"path": f"{str(CWD)}/../data/homes2.csv", "load_table": True, "is_temp": False, "param": {
                 "schema": SCHEMA,
                 "table_name": test_utils.get_table_name("test_stats_check_2"),
-            },
-        }
-    ],
-    indirect=True,
-)
+            }}], indirect=True)
 @pytest.mark.parametrize(
     "identifiers_as_lower",
     [True, False],

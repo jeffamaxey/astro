@@ -91,9 +91,7 @@ class AgnosticAggregateCheck(SqlDecoratedOperator):
             and (self.greater_than > query_result or query_result > self.less_than)
         ):
             raise ValueError(
-                "Check Failed: query result value {} not in range from {} to {}.".format(
-                    query_result, self.greater_than, self.less_than
-                )
+                f"Check Failed: query result value {query_result} not in range from {self.greater_than} to {self.less_than}."
             )
         elif self.less_than is not None and self.less_than < query_result:
             raise ValueError(
@@ -101,9 +99,7 @@ class AgnosticAggregateCheck(SqlDecoratedOperator):
             )
         elif self.greater_than is not None and self.greater_than > query_result:
             raise ValueError(
-                "Check Failed: query result value {} not greater than {}.".format(
-                    query_result, self.greater_than
-                )
+                f"Check Failed: query result value {query_result} not greater than {self.greater_than}."
             )
         return self.table
 

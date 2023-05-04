@@ -18,11 +18,11 @@ def snowflake_merge_func(
     statement = "merge into {{main_table}} using {{merge_table}} on " "{merge_clauses}"
 
     merge_target_dict = {
-        "merge_clause_target_" + str(i): target_table.table_name + "." + x
+        f"merge_clause_target_{str(i)}": f"{target_table.table_name}.{x}"
         for i, x in enumerate(merge_keys.keys())
     }
     merge_append_dict = {
-        "merge_clause_append_" + str(i): merge_table.table_name + "." + x
+        f"merge_clause_append_{str(i)}": f"{merge_table.table_name}.{x}"
         for i, x in enumerate(merge_keys.values())
     }
 
@@ -57,9 +57,7 @@ def snowflake_merge_func(
         merge_columns,
     )
 
-    params = {}
-    params.update(merge_target_dict)
-    params.update(merge_append_dict)
+    params = merge_target_dict | merge_append_dict
     params["main_table"] = target_table
     params["merge_table"] = merge_table
 
@@ -101,7 +99,7 @@ def fill_in_merge_clauses(merge_append_dict, merge_target_dict, statement):
     return statement.replace(
         "{merge_clauses}",
         " AND ".join(
-            wrap_identifier(k) + "=" + wrap_identifier(v)
+            f"{wrap_identifier(k)}={wrap_identifier(v)}"
             for k, v in zip(merge_target_dict.keys(), merge_append_dict.keys())
         ),
     )
@@ -119,14 +117,12 @@ def is_valid_snow_identifier(name):
         return False
 
     name_is_quoted = name[0] == '"'
-    if name_is_quoted:
-        if len(name) < 2 or name[-1] != '"':
-            return False  # invalid because no closing quote
-
-        return ensure_internal_quotes_closed(name)
-
-    else:  # not quoted
+    if not name_is_quoted:
         return ensure_only_valid_characters(name)
+    if len(name) < 2 or name[-1] != '"':
+        return False  # invalid because no closing quote
+
+    return ensure_internal_quotes_closed(name)
 
 
 # test code to check for validate snowflake identifier
@@ -141,16 +137,12 @@ def ensure_internal_quotes_closed(name):
             last_quoted = True
         # any character is fair game inside a properly quoted name
 
-    if last_quoted:
-        return False  # last quote was not escape
-
-    return True
+    return not last_quoted
 
 
 def ensure_only_valid_characters(name):
     if not (name[0].isalpha()) and name[0] != "_":
         return False
-    for c in name[1:]:
-        if not (c.isalpha() or c.isdigit() or c == "_" or c == "$"):
-            return False
-    return True
+    return all(
+        (c.isalpha() or c.isdigit() or c == "_" or c == "$") for c in name[1:]
+    )

@@ -94,12 +94,10 @@ def add_constraint(table: Table):
 @task_group
 def run_append(output_specs: TempTable):
     load_main = aql.load_file(
-        path=str(CWD) + "/data/homes_main.csv",
-        output_table=output_specs,
+        path=f"{str(CWD)}/data/homes_main.csv", output_table=output_specs
     )
     load_append = aql.load_file(
-        path=str(CWD) + "/data/homes_append.csv",
-        output_table=output_specs,
+        path=f"{str(CWD)}/data/homes_append.csv", output_table=output_specs
     )
 
     aql.append(
@@ -112,12 +110,10 @@ def run_append(output_specs: TempTable):
 @task_group
 def run_merge(output_specs: TempTable, merge_keys):
     main_table = aql.load_file(
-        path=str(CWD) + "/data/homes_merge_1.csv",
-        output_table=output_specs,
+        path=f"{str(CWD)}/data/homes_merge_1.csv", output_table=output_specs
     )
     merge_table = aql.load_file(
-        path=str(CWD) + "/data/homes_merge_2.csv",
-        output_table=output_specs,
+        path=f"{str(CWD)}/data/homes_merge_2.csv", output_table=output_specs
     )
 
     con1 = add_constraint(main_table)
@@ -148,7 +144,7 @@ def test_full_dag(sql_server, sample_dag, test_table):
     with sample_dag:
         output_table = test_table
         loaded_table = aql.load_file(
-            str(CWD) + "/data/homes.csv", output_table=output_table
+            f"{str(CWD)}/data/homes.csv", output_table=output_table
         )
         tranformed_table = apply_transform(loaded_table)
         run_dataframe_funcs(tranformed_table)

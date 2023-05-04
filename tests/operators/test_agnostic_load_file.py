@@ -104,8 +104,8 @@ def test_aql_load_remote_file_to_dbs(sample_dag, test_table, sql_server, remote_
 )
 def test_aql_replace_existing_table(sample_dag, test_table, sql_server):
     sql_name, hook = sql_server
-    data_path_1 = str(CWD) + "/../data/homes.csv"
-    data_path_2 = str(CWD) + "/../data/homes2.csv"
+    data_path_1 = f"{str(CWD)}/../data/homes.csv"
+    data_path_2 = f"{str(CWD)}/../data/homes2.csv"
     with sample_dag:
         task_1 = load_file(path=data_path_1, file_conn_id="", output_table=test_table)
         task_2 = load_file(path=data_path_2, file_conn_id="", output_table=test_table)
@@ -130,7 +130,7 @@ def test_aql_replace_existing_table(sample_dag, test_table, sql_server):
 )
 def test_aql_local_file_with_no_table_name(sample_dag, test_table, sql_server):
     sql_name, hook = sql_server
-    data_path = str(CWD) + "/../data/homes.csv"
+    data_path = f"{str(CWD)}/../data/homes.csv"
     with sample_dag:
         load_file(path=data_path, file_conn_id="", output_table=test_table)
     test_utils.run_dag(sample_dag)
@@ -149,7 +149,7 @@ def test_unique_task_id_for_same_path(sample_dag):
     with sample_dag:
         for index in range(4):
             params = {
-                "path": str(CWD) + "/../data/homes.csv",
+                "path": f"{str(CWD)}/../data/homes.csv",
                 "file_conn_id": "",
                 "output_table": Table(
                     OUTPUT_TABLE_NAME,
@@ -212,7 +212,7 @@ def test_aql_load_file_pattern(remote_file, sample_dag, test_table, sql_server):
 
     with sample_dag:
         load_file(
-            path=file_prefix[0][0:-5],
+            path=file_prefix[0][:-5],
             file_conn_id=file_conn_id,
             output_table=test_table,
         )
@@ -227,14 +227,14 @@ def test_aql_load_file_pattern(remote_file, sample_dag, test_table, sql_server):
 @pytest.mark.integration
 @pytest.mark.parametrize("sql_server", ["postgres"], indirect=True)
 def test_aql_load_file_local_file_pattern(sample_dag, test_table, sql_server):
-    filename = str(CWD.parent) + "/data/homes_pattern_1.csv"
+    filename = f"{str(CWD.parent)}/data/homes_pattern_1.csv"
     database_name, sql_hook = sql_server
 
     test_df_rows = pd.read_csv(filename).shape[0]
 
     with sample_dag:
         load_file(
-            path=str(CWD.parent) + "/data/homes_pattern_*",
+            path=f"{str(CWD.parent)}/data/homes_pattern_*",
             file_conn_id="",
             output_table=test_table,
         )
@@ -408,7 +408,7 @@ def test_aql_nested_ndjson_file_with_default_sep_param(
     _, hook = sql_server
     with sample_dag:
         load_file(
-            path=str(CWD) + "/../data/github_single_level_nested.ndjson",
+            path=f"{str(CWD)}/../data/github_single_level_nested.ndjson",
             output_table=test_table,
         )
     test_utils.run_dag(sample_dag)
@@ -426,7 +426,7 @@ def test_aql_nested_ndjson_file_to_bigquery_explicit_sep_params(
     _, hook = sql_server
     with sample_dag:
         load_file(
-            path=str(CWD) + "/../data/github_single_level_nested.ndjson",
+            path=f"{str(CWD)}/../data/github_single_level_nested.ndjson",
             output_table=test_table,
             ndjson_normalize_sep="___",
         )
@@ -447,7 +447,7 @@ def test_aql_nested_ndjson_file_to_bigquery_explicit_illegal_sep_params(
     _, hook = sql_server
     with sample_dag:
         load_file(
-            path=str(CWD) + "/../data/github_single_level_nested.ndjson",
+            path=f"{str(CWD)}/../data/github_single_level_nested.ndjson",
             output_table=test_table,
             ndjson_normalize_sep=".",
         )
@@ -469,7 +469,7 @@ def test_aql_multilevel_nested_ndjson_file_default_params(
     with pytest.raises(BackfillUnfinished):
         with sample_dag:
             load_file(
-                path=str(CWD) + "/../data/github_multi_level_nested.ndjson",
+                path=f"{str(CWD)}/../data/github_multi_level_nested.ndjson",
                 output_table=test_table,
             )
         test_utils.run_dag(sample_dag)
